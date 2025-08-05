@@ -33,7 +33,7 @@ function EarningSteps() {
 
     return (
         <div>
-            <div className="py-12 px-4 bg-white text-center relative">
+            <div className="py-12 px-4 bg-white text-center relative pt-20">
                 <div className="absolute top-10 right-10 w-16 h-16 bg-[#00b2dd] opacity-10 rounded-full"></div>
                 <div className="absolute bottom-20 left-10 w-20 h-20 bg-[#f9b017] opacity-10 rounded-full"></div>
                 <div className="absolute top-32 left-1/4 w-12 h-12 bg-[#00b2dd] opacity-5 rounded-full"></div>

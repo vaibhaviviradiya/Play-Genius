@@ -27,9 +27,9 @@ function HomeSlider() {
 
     return (
         <div>
-            <div className="home-slider w-full flex">
+            <div className="home-slider w-full flex ">
                 
-                    <div  className={`w-full h-125`}>
+                    <div  className={`w-full h-145`}>
                         <div  className="flex items-center justify-center h-full">
                             {/* <h1 className="text-2xl font-bold">{slide.text}</h1> */}
                             <img src={slideData[currentIndex].img} className="w-full h-125 object-cover" alt="" />

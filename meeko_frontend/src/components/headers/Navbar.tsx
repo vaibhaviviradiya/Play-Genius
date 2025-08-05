@@ -28,7 +28,7 @@ function Navbar() {
   }, []);
 
   return (
-    <div className="w-full bg-cyan-400 shadow-md">
+    <div className="w-full bg-cyan-400 shadow-md fixed top-0 z-50">
       <div className="flex justify-between items-center px-8 py-4">
         {/* Logo */}
         <div className="flex items-center">

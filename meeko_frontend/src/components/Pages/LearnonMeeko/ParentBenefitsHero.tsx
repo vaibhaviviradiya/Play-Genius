@@ -61,7 +61,7 @@ function ParentBenefitsHero() {
 
     return (
         <div>
-            <div className="relax_moms_dad_container bg-gray-100 px-10 py-10">
+            <div className="relax_moms_dad_container bg-gray-100 px-10 py-10 pt-30">
                 <div className="relax_moms_dad_title flex justify-center text-gray-500 text-3xl font-bold mb-4">
                     Relax Moms & Dads
                 </div>
