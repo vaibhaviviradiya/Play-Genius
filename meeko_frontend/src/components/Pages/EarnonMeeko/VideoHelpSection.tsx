@@ -13,9 +13,6 @@ interface VideoOption {
   frameTitle: string;
 }
 
-const VideoHelpSection = () => {
-  const [selectedVideo, setSelectedVideo] = useState<VideoOption | null>(null);
-  const [activeFrame, setActiveFrame] = useState<VideoOption | null>(null);
 
   const helpOptions: VideoOption[] = [
     {
@@ -43,6 +40,9 @@ const VideoHelpSection = () => {
       frameTitle: "How To Make CLASS",
     }
   ];
+const VideoHelpSection = () => {
+  const [selectedVideo, setSelectedVideo] = useState<VideoOption | null>(null);
+  const [activeFrame, setActiveFrame] = useState<VideoOption | null>(null);
 
   // Set initial active frame to first option
   React.useEffect(() => {
@@ -81,7 +81,7 @@ const VideoHelpSection = () => {
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* Left Side - Help Options */}
         <div className="flex-1 max-w-md">
-          <h2 className="text-4xl font-bold text-cyan-400 mt-20  mb-8">Find out more</h2>
+          <h2 className="text-4xl font-bold text-cyan-400 mt-6  mb-8">Find out more</h2>
 
           <div className="space-y-5">
             {helpOptions.map((option) => (

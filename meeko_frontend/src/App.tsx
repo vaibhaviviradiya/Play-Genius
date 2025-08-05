@@ -11,6 +11,8 @@ import Parentsignup from './components/Auth/Parent/Parentsignup'
 import ExploreClassPage from './components/Pages/Exploreclasses/ExploreClassPage'
 import LearnonmeekoPage from './components/Pages/LearnonMeeko/LearnonmeekoPage'
 import EarnMeeko from './components/Pages/EarnonMeeko/EarnMeeko'
+import Footer from './components/footer/Footer'
+import AboutUs from './components/Footer-Pages/AboutUs'
 
 const queryClient = new QueryClient();
 function App() {
@@ -35,7 +37,9 @@ function App() {
             <Route path='/learn-on-meeko' element={<LearnonmeekoPage />} />
             {/* earn on meeko page */}
             <Route path='/earn-on-meeko' element={<EarnMeeko />} />
+            <Route path='/about-us' element={<AboutUs/>}/>
           </Routes>
+          <Footer/>
         </BrowserRouter>
       </QueryClientProvider>
     </>
