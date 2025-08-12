@@ -3,3 +3,13 @@
   /* background: var(--color-sky-400); */
   background-color: rgb(240, 251, 186);
 }
+
+/* Hide scrollbar for Chrome, Safari, Edge */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.scrollbar-hide {
+  scrollbar-width: none;
+}

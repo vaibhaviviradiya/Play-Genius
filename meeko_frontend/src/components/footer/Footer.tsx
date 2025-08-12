@@ -4,7 +4,7 @@ import { GiPenguin } from 'react-icons/gi';
 
 function Footer() {
     return (
-        <div className="bg-cyan-500 text-white pt-10 pb-5">
+        <div className="bg-cyan-500 text-white pt-10 pb-5 z-100">
             <div className="footer_grid flex flex-wrap justify-between px-10">
                 {/* Column 1: Logo & Tagline */}
                 <div className="footer_items p-5">

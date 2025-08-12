@@ -29,31 +29,31 @@ exports.educator_register = async (req, res) => {
     }
 }
 
+const jwt = require('jsonwebtoken');
+
 exports.educator_login = async (req, res) => {
     try {
-        var { email, username, password } = req.body
-        var data = await educator.findOne({
-              $or: [
-                { username: username },
-                { email: email }
-            ]
-        })
-        console.log(data);
-        if (data) {
-            var password = await bcrypt.compare(req.body.password, data.password)
-            if (!password) {
-                console.log("Incorrect Password");
-            }
-            res.status(200).json({
-                status: true,
-                message: "Educator Login successfully",
-            })
-        }
+        const { email, username, password } = req.body;
+        const data = await educator.findOne({
+            $or: [{ username }, { email }]
+        });
+
+        if (!data) return res.status(404).json({ message: 'Educator not found' });
+
+        const match = await bcrypt.compare(password, data.password);
+        if (!match) return res.status(400).json({ message: 'Incorrect password' });
+
+        const token = jwt.sign(
+            { educator_id: data._id, educator_name: data.username , educator_email : data.email},
+            process.env.JWT_SECRET           
+        );
+
+        res.status(200).json({
+            status: true,
+            message: "Educator Login successfully",
+            token
+        });
+    } catch (error) {
+        res.status(500).json({ status: false, error: error.message });
     }
-    catch (error) {
-        res.status(500).json({
-            status: false,
-            error: error.message
-        })
-    }
-}
+};

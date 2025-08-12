@@ -35,21 +35,24 @@ function LoginTemp({ images, logo, welcomeTitle, welcomeSubtitle, loginUrl, redi
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values) => {
-      console.log("Login Values:", values);
-      try {
-        const response = await axios.post(loginUrl, values);
-        console.log("Login Response:", response.data);
+onSubmit: async (values) => {
+  try {
+    const response = await axios.post(loginUrl, values);
 
-        if (response.data.status) {
-          navigate(redirectUrl); // Redirect after successful login
-        } else {
-          alert("Login failed. Please check your credentials.");
-        }
-      } catch (error) {
-        console.error("Login Error:", error);
-      }
-    },
+    if (response.data.status) {
+      // Store token in sessionStorage
+      sessionStorage.setItem("token", response.data.token);
+
+      // Redirect
+      navigate(redirectUrl);
+    } else {
+      alert("Login failed. Please check your credentials.");
+    }
+  } catch (error) {
+    console.error("Login Error:", error);
+  }
+},
+
   });
 
   // Image slider effect
