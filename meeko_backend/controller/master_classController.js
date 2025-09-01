@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 const classesSchema = require('../model/classes');
+const batch = require('../model/batch')
+const session = require('../model/sessions')
+const mongoose = require('mongoose')
 
 exports.create_class = async (req, res) => {
     try {
@@ -24,31 +27,10 @@ exports.create_class = async (req, res) => {
             if (req.files['class_certificate']) {
                 req.body.class_certificate = req.files['class_certificate'][0].originalname;
             }
-            if (req.files['document']) {
-                req.body.class_documents = req.files['document'].map(file => file.originalname);
+            if (req.files['class_documents']) {
+                req.body.class_documents = req.files['class_documents'].map(file => file.originalname);
             }
         }
-
-               // Parse batches JSON
-        if (req.body.batches) {
-            try {
-                req.body.batches = JSON.parse(req.body.batches);
-
-                // Attach documents to batches if provided
-                if (req.files['document']) {
-                    req.body.batches.forEach((batch, index) => {
-                        if (req.files['document'][index]) {
-                            batch.document = req.files['document'][index].originalname;
-                        }
-                    });
-                }
-
-            } catch (err) {
-                console.error("Error parsing batches:", err);
-                return res.status(400).json({ message: 'Invalid batches format' });
-            }
-        }
-
 
         const class_details = {
             ...req.body,
@@ -72,4 +54,62 @@ exports.create_class = async (req, res) => {
             message: error.message
         });
     }
+};
+
+
+exports.create_batch = async(req,res)=>{
+    try{
+        var data = req.body;
+        var document_file = null;
+        if(req.files || req.files["documents"])
+        {
+              documentFile = req.files["documents"][0].originalname;
+        }
+
+        const batch_data = await batch.create({
+            ...data,
+            document : document_file
+        })
+
+        res.status(201).json({ success: true, data: batch_data });
+    }
+    catch(error)
+    {
+         res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+
+exports.create_session = async (req, res) => {
+  try {
+    const data = req.body;
+
+    const sessionData = await session.create({ ...data });
+
+    res.status(201).json({ success: true, data: sessionData });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+exports.getClassDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const classData = await mongoose.model("Master_class").findById(id).lean();
+    if (!classData) return res.status(404).json({ message: "Class not found" });
+
+    const batches = await mongoose.model("Batch").find({ class_id: id }).lean();
+
+    for (let batch of batches) {
+      batch.sessions = await mongoose.model("Session").find({ batch: batch._id }).lean();
+    }
+
+    classData.batches = batches;
+
+    res.json({ success: true, data: classData });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
