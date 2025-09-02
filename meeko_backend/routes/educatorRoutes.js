@@ -3,7 +3,7 @@ var express = require('express');
 var multer = require('multer');
 
 const { get } = require('mongoose');
-const { create_class,create_batch,create_session,getClassDetails} = require('../controller/master_classController');
+const { create_class,create_batch,create_session,getClassDetails, getClassesByEducator} = require('../controller/master_classController');
 const livesession = require('../model/livesession');
 const { createLiveSession } = require('../controller/livesessionCotroller');
 var router = express.Router();
@@ -40,6 +40,8 @@ router.post('/createbatch', upload.fields([{ name: 'documents', maxCount: 3 }]),
 router.post('/createsession', upload.none(), create_session);
 
 router.get('/getclass/:id', getClassDetails);
+
+router.get('/getallclasssesofeducator',getClassesByEducator)
 
 router.post('/createlivesession', createLiveSession)
 module.exports = router;

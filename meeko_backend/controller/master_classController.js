@@ -56,58 +56,90 @@ exports.create_class = async (req, res) => {
     }
 };
 
-exports.create_batch = async(req,res)=>{
-    try{
+exports.create_batch = async (req, res) => {
+    try {
         var data = req.body;
         var document_file = null;
-        if(req.files || req.files["documents"])
-        {
-              documentFile = req.files["documents"][0].originalname;
+        if (req.files || req.files["documents"]) {
+            documentFile = req.files["documents"][0].originalname;
         }
 
         const batch_data = await batch.create({
             ...data,
-            document : document_file
+            document: document_file
         })
 
         res.status(201).json({ success: true, data: batch_data });
     }
-    catch(error)
-    {
-         res.status(500).json({ success: false, message: error.message });
+    catch (error) {
+        res.status(500).json({ success: false, message: error.message });
     }
 }
 
 exports.create_session = async (req, res) => {
-  try {
-    const data = req.body;
+    try {
+        const data = req.body;
 
-    const sessionData = await session.create({ ...data });
+        const sessionData = await session.create({ ...data });
 
-    res.status(201).json({ success: true, data: sessionData });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
+        res.status(201).json({ success: true, data: sessionData });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
 };
 
 
 exports.getClassDetails = async (req, res) => {
-  try {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const classData = await mongoose.model("Master_class").findById(id).lean();
-    if (!classData) return res.status(404).json({ message: "Class not found" });
+        const classData = await mongoose.model("Master_class").findById(id).lean();
+        if (!classData) return res.status(404).json({ message: "Class not found" });
 
-    const batches = await mongoose.model("Batch").find({ class_id: id }).lean();
+        const batches = await mongoose.model("Batch").find({ class_id: id }).lean();
 
-    for (let batch of batches) {
-      batch.sessions = await mongoose.model("Session").find({ batch: batch._id }).lean();
+        for (let batch of batches) {
+            batch.sessions = await mongoose.model("Session").find({ batch: batch._id }).lean();
+        }
+
+        classData.batches = batches;
+
+        res.json({ success: true, data: classData });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
     }
-
-    classData.batches = batches;
-
-    res.json({ success: true, data: classData });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
 };
+
+exports.getClassesByEducator = async (req, res) => {
+    try {
+        const token = req.headers.authorization
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const educator_id = decoded.educator_id;
+        console.log("educator_id >>> ", educator_id);
+
+        const classes = await mongoose.model("Master_class").find({ educator_id }).lean();
+        // loop through classes and add batches + sessions
+        for (let classObj of classes) {
+            const batches = await mongoose.model("Batch").find({ class_id: classObj._id }).lean();
+
+            for (let batch of batches) {
+                batch.sessions = await mongoose.model("Session").find({ batch: batch._id }).lean();
+            }
+
+            classObj.batches = batches;
+        }
+
+        res.json({ success: true, data: classes });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+exports.getAllClasses = async (req, res) => {
+    try {
+        const classes = await mongoose.model("Master_class").find().lean();
+        res.json({ success: true, data: classes });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}

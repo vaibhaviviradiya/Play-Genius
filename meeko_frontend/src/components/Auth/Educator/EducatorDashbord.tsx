@@ -1,5 +1,6 @@
+import { jwtDecode } from 'jwt-decode';
 import { BarChart3, Calendar, Eye, Play, BookOpen, DollarSign, Star, MessageSquare, TrendingUp, Settings, Bell, User, ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const EducatorDashboard = () => {
   const [activeSection, setActiveSection] = useState('Dashboard');
@@ -34,6 +35,26 @@ const EducatorDashboard = () => {
     { month: 'Nov', students: 4.8 },
     { month: 'Dec', students: 5.5 }
   ];
+  const mytoken = localStorage.getItem("token");
+  console.log("mytoken == ", mytoken);
+
+  type DecodedToken = {
+    educator_id?: string;
+    educator_name?: string;
+    educator_email?: string;
+  };
+  const [username, setUsername] = useState<string | undefined>("");
+  useEffect(() => {
+    if (mytoken) {
+      const decoded = jwtDecode<DecodedToken>(mytoken);
+      console.log("decoded token == ", decoded);
+      setUsername(decoded.educator_name);
+      console.log("username == ", username);
+    } else {
+      console.warn("No token found in localStorage.");
+    }
+  },[username,mytoken])
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -41,14 +62,14 @@ const EducatorDashboard = () => {
       <div className="group fixed left-0 top-0 h-screen z-10 transition-all duration-300 ease-in-out">
         {/* Sidebar Container */}
         <div className="w-16 group-hover:w-64 bg-gradient-to-b from-cyan-400 to-cyan-600 text-white h-full overflow-hidden transition-all duration-300 ease-in-out">
-          <div className="p-2 h-full flex flex-col">          
+          <div className="p-2 h-full flex flex-col">
             <nav className="space-y-2 overflow-y-auto mt-20 flex-1 pr-1 scrollbar-hide">
               {sidebarItems.map((item, index) => (
                 <div
                   key={index}
                   className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200 ${item.name === activeSection
-                      ? 'bg-white text-black bg-opacity-20'
-                      : 'hover:bg-white hover:text-cyan-600 hover:bg-opacity-10'
+                    ? 'bg-white text-black bg-opacity-20'
+                    : 'hover:bg-white hover:text-cyan-600 hover:bg-opacity-10'
                     }`}
                   onClick={() => setActiveSection(item.name)}
                   title={item.name} // Tooltip for collapsed state
@@ -78,7 +99,7 @@ const EducatorDashboard = () => {
         {/* Header */}
         <div className="fixed bg-white shadow-sm border-b p-4 flex  items-center justify-between sticky">
           <div className="flex items-center space-x-4">
-            <h1 className="text-xl font-semibold text-gray-800">How to make a class on Meeko World?</h1>
+            <h1 className="text-xl font-semibold text-gray-800">Welcome , {username}</h1>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -140,7 +161,7 @@ const EducatorDashboard = () => {
                     </div>
                   ))}
                 </div>
-                  <h4>chart for enroll students </h4>
+                <h4>chart for enroll students </h4>
 
                 <button className="text-cyan-500 text-sm hover:underline">View All</button>
               </div>
@@ -175,28 +196,35 @@ const EducatorDashboard = () => {
                   </div>
                 </div>
 
-                <button className="text-cyan-500 text-sm hover:underline">View All</button>
+                <button onClick={() => navigate("/educator/dashboard/myclasses")} className="text-cyan-500 text-sm hover:underline">View All</button>
               </div>
 
               {/* Total Earning */}
               <div className="bg-white rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold mb-4 text-gray-800">Finance</h3>
+                <h3 className="text-lg font-semibold mb-4 text-gray-800">My Classes</h3>
 
-                <div className="bg-gradient-to-r mt-10 from-yellow-100 to-orange-100 rounded-xl p-6 border-2 border-yellow-200 mb-4">
+                <div className="bg-gradient-to-r mt-10 from-yellow-100 to-orange-100 rounded-xl p-6 border-2 border-orange-200 mb-4">
                   <div className="flex items-center justify-center mb-3">
-                    <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
-                      <DollarSign className="w-5 h-5 text-white" />
+                    <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                      
+                      <BookOpen className="w-5 h-5 text-white" />
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-sm text-gray-600 mb-1">Total Earning</div>
-                    <div className="text-3xl font-bold text-gray-800">$0</div>
-                    <div className="text-xs text-gray-500 mt-1">This month</div>
+                    <div className="text-sm text-gray-600 mb-1">Total Classes</div>
+                    <div className="text-3xl font-bold text-gray-800">25</div>
+                    <div className="text-xs text-gray-500 mt-1">Created by you</div>
                   </div>
                 </div>
 
-                <button className="text-cyan-500 text-sm hover:underline">View All</button>
+                <button
+                  className="text-cyan-500 text-sm hover:underline"
+                  onClick={() => navigate("/educator/dashboard/myclasses")}
+                >
+                  View All
+                </button>
               </div>
+
             </div>
 
             {/* Bottom Row - Larger Cards */}
@@ -212,7 +240,7 @@ const EducatorDashboard = () => {
                     "You have no upcoming classes right now. Create more now."
                   </div>
                   <button className="bg-cyan-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-cyan-600 transition-colors"
-                  onClick={() => navigate('/educator/dashboard/createclass')}
+                    onClick={() => navigate('/educator/dashboard/createclass')}
                   >
                     Create Class
                   </button>
