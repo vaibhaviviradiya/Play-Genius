@@ -2,13 +2,18 @@ import { jwtDecode } from 'jwt-decode';
 import { BarChart3, Calendar, Eye, Play, BookOpen, DollarSign, Star, MessageSquare, TrendingUp, Settings, Bell, User, ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useEducatorClasses } from '../../../Hooks/useEducatorClasses';
+
 const EducatorDashboard = () => {
   const [activeSection, setActiveSection] = useState('Dashboard');
   const [dateRange] = useState('21 Jan 2022 to 21 Feb 2022');
   const navigate = useNavigate()
+  const { data: classes } = useEducatorClasses();
+  console.log("total classses >> ",classes?.length);
+  
   const sidebarItems = [
     { name: 'Dashboard', icon: BarChart3, active: true },
-    { name: 'My Classes', icon: BookOpen, count: 25 },
+    { name: 'My Classes', icon: BookOpen, count: classes?.length || 0 },
     { name: 'Calendar', icon: Calendar },
     { name: 'My Space', icon: User },
     { name: 'Test', icon: MessageSquare },
@@ -199,7 +204,7 @@ const EducatorDashboard = () => {
                 <button onClick={() => navigate("/educator/dashboard/myclasses")} className="text-cyan-500 text-sm hover:underline">View All</button>
               </div>
 
-              {/* Total Earning */}
+              {/* Total classes */}
               <div className="bg-white rounded-xl p-6 shadow-sm">
                 <h3 className="text-lg font-semibold mb-4 text-gray-800">My Classes</h3>
 
@@ -212,7 +217,7 @@ const EducatorDashboard = () => {
                   </div>
                   <div className="text-center">
                     <div className="text-sm text-gray-600 mb-1">Total Classes</div>
-                    <div className="text-3xl font-bold text-gray-800">25</div>
+                    <div className="text-3xl font-bold text-gray-800"> {classes?.length || 0}</div>
                     <div className="text-xs text-gray-500 mt-1">Created by you</div>
                   </div>
                 </div>
