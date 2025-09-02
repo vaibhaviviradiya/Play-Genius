@@ -14,6 +14,7 @@ import EarnMeeko from './components/Pages/EarnonMeeko/EarnMeeko'
 import Footer from './components/footer/Footer'
 import AboutUs from './components/Footer-Pages/AboutUs'
 import CreateClass from './components/Auth/Educator/CreateClass'
+import BatchesSessions from './components/Auth/Educator/BatchesSessions'
 
 const queryClient = new QueryClient();
 function App() {
@@ -32,6 +33,7 @@ function App() {
             <Route path='/educator/login' element={<EducatorLogin />} />
             <Route path='/educator/dashboard' element={<EducatorDashbord />} />
             <Route path='/educator/dashboard/createclass' element={<CreateClass/>}/>
+            <Route path='/educator/dashboard/batches_sessions' element={<BatchesSessions/>}/>
             {/* explore class page */}
             <Route path='/explore-class' element={<ExploreClassPage />} />
             {/* learn on meeko page */}

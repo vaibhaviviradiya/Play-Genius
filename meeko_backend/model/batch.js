@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 
-
 var batchSchema = new mongoose.Schema({
     class_id : { type: mongoose.Schema.Types.ObjectId, ref: "Master_class", required: true },
     batch_name: { type: String, required: true }, // e.g., "Batch 1"

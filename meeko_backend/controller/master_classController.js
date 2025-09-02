@@ -56,7 +56,6 @@ exports.create_class = async (req, res) => {
     }
 };
 
-
 exports.create_batch = async(req,res)=>{
     try{
         var data = req.body;
@@ -78,7 +77,6 @@ exports.create_batch = async(req,res)=>{
          res.status(500).json({ success: false, message: error.message });
     }
 }
-
 
 exports.create_session = async (req, res) => {
   try {

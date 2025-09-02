@@ -41,7 +41,7 @@ onSubmit: async (values) => {
 
     if (response.data.status) {
       // Store token in sessionStorage
-      sessionStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data.token);
 
       // Redirect
       navigate(redirectUrl);
@@ -116,7 +116,7 @@ onSubmit: async (values) => {
                   <input
                     name="email"
                     type="text"
-                    placeholder="Email / Username"
+                    placeholder="Email "
                     className="flex-1 border-none outline-none px-3 bg-transparent text-gray-700"
                     value={formik.values.email}
                     onChange={formik.handleChange}
@@ -142,6 +142,7 @@ onSubmit: async (values) => {
                 {formik.errors.password && formik.touched.password ? (
                   <div className="text-red-500 text-sm mb-4">{formik.errors.password}</div>
                 ) : null}
+
 
                 {/* Additional Links */}
                       <div className="login-otp-div flex justify-between">
